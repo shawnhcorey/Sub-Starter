@@ -235,7 +235,7 @@ sub _parse_variable {
 
 # --------------------------------------
 #       Name: _parse_returns
-#      Usage: $sub_starter->_parse_returns( $parsed, $returns_part );
+#      Usage: _parse_returns( $parsed, $returns_part );
 #    Purpose: Parse the sub's return variables
 # Parameters:       $parsed -- storage hash
 #             $returns_part -- part of the usage statment before the assignment
@@ -341,13 +341,13 @@ sub _parse_parameters {
 }
 
 # --------------------------------------
-#       Name: parse
-#      Usage: $sub_starter->parse( $usage_statement );
+#       Name: parse_usage
+#      Usage: $sub_starter->parse_usage( $usage_statement );
 #    Purpose: Parse a usage statement and store its contents.
 # Parameters: $usage_statement -- See POD for details
 #    Returns: none
 #
-sub parse {
+sub parse_usage {
   my $self            = shift @_;
   my $usage_statement = shift @_;
   my $usage = $usage_statement;
@@ -391,7 +391,7 @@ sub parse {
   # set the values
   $self->configure( %$parsed );
 
-  # print "\n\nSub::Starter->parse(): ", Dumper $usage_statement, $self;
+  # print "\n\nSub::Starter->parse_usage(): ", Dumper $usage_statement, $self;
   return;
 }
 
@@ -817,6 +817,124 @@ This document refers to Sub::Starter version v1.0.0
 TBD
 
 =head1 METHODS
+
+=head2 new()
+
+=head3 Usage
+
+  $starter_sub = Sub::Starter->new( ; %attributes );
+
+=head3 Parameters
+
+=over 4
+
+=item %attributes
+
+TBD
+
+=back
+
+=head3 Returns
+
+=over 4
+
+=item $starter_sub
+
+TBD
+
+=back
+
+=head2 configure()
+
+=head3 Usage
+
+  $starter_sub->configure( %attributes );
+
+=head3 Parameters
+
+=over 4
+
+=item %attributes
+
+TBD
+
+=back
+
+=head3 Returns
+
+(none)
+
+=head2 get_options()
+
+=head3 Usage
+
+  %attributes = $starter_sub->get_options( ; @options_names );
+
+=head3 Parameters
+
+=over 4
+
+=item @options_names
+
+TBD
+
+=back
+
+=head3 Returns
+
+=over 4
+
+=item %attributes
+
+TBD
+
+=back
+
+=head2 parse_usage()
+
+=head3 Usage
+
+  $sub_starter->parse_usage( $usage_statement );
+
+=head3 Parameters
+
+=over 4
+
+=item $usage_statement
+
+TBD
+
+=back
+
+=head3 Returns
+
+(none)
+
+=head2 fill_out()
+
+=head3 Usage
+
+  $text = $sub_starter->fill_out( \@template );
+
+=head3 Parameters
+
+=over 4
+
+=item \@template
+
+TBD
+
+=back
+
+=head3 Returns
+
+=over 4
+
+=item $text
+
+TBD
+
+=back
 
 =head1 DIAGNOSTICS
 

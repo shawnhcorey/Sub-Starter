@@ -231,7 +231,7 @@ sub start_sub {
   my $usage = shift @_;
 
   my $sub_starter = Sub::Starter->new();
-  $sub_starter->parse( $usage );
+  $sub_starter->parse_usage( $usage );
   # print 'sub ', Dumper $sub_starter;
 
   for my $display ( @Displays ){
