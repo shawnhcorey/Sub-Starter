@@ -3,6 +3,7 @@ Changes
 MANIFEST
 README
 lib/Sub/Starter.pm
+scripts/substarter.pl
 t/00-load.t
 t/pod-coverage.t
 t/pod.t

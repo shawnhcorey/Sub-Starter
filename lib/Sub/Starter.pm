@@ -816,8 +816,6 @@ This document refers to Sub::Starter version v1.0.0
 
 TBD
 
-=head1 ATTRIBUTES
-
 =head1 METHODS
 
 =head1 DIAGNOSTICS
