@@ -5,7 +5,7 @@
 # Purpose: Starts a sub from a usage statement formatted from a template.
 #
 #    Name: substarter
-#    File: substarter.pl
+#    File: substarter
 # Created: July 25, 2009
 #
 # Copyright: Copyright 2009 by Shawn H Corey.  All rights reserved.
@@ -326,8 +326,8 @@ This document refers to substarter version v1.0.0
 
 =head1 USAGE
 
-  substarter.pl [<options>] [<file>] ...
-  substarter.pl --usage|help|version|man
+  substarter [<options>] [<file>] ...
+  substarter --usage|help|version|man
 
 =head1 REQUIRED ARGUMENTS
 
