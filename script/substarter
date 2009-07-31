@@ -290,6 +290,8 @@ sub [1m(name)[0m {
 [pod]
 =head2 [1m(name)[0m()
 
+TBD
+
 =head3 Usage
 
   [1m(usage)[0m
@@ -330,6 +332,8 @@ This document refers to substarter version v1.0.0
   substarter --usage|help|version|man
 
 =head1 REQUIRED ARGUMENTS
+
+(none)
 
 =head1 OPTIONS
 
@@ -387,14 +391,14 @@ See L<EXAMPLES> for details.
 Templates are read from templates files.  First, any
 template files given via the command-line option,
 C<--templatefiles> are scanned.  Then, the file
-C</etc/substarterrc> is scanned, if it exists.  Then, the
-file C<~/.substarterrc> is scanned, if it exists.  Then,
+C<~/.substarterrc> is scanned, if it exists.  Then, the file
+C</etc/substarterrc> is scanned, if it exists.  Then,
 internal templates are scanned.
 
 Templates that appear first in the scan order override those
 that appear later.
 
-The internal templates are for 'usage', 'sub', and 'pod'.
+The internal templates are for C<usage>, C<sub>, and C<pod>.
 
 See L<Sub::Starter|Templates> for details on how to write a template.
 
@@ -408,7 +412,16 @@ L<Sub::Starter>
 
 =item /etc/substarterrc
 
+System-wide template file used for overriding the internal
+templates.  See L<Sub::Starter|Templates> for details on how
+to write a template.
+
 =item ~/.substarterrc
+
+Personal template file used for overriding the system-wide
+templates and internal templates.  See
+L<Sub::Starter|Templates> for details on how to write a
+template.
 
 =back
 
@@ -853,13 +866,23 @@ L<Sub::Starter>
 
 =head1 DIAGNOSTICS
 
+(none)
+
 =head1 CONFIGURATION AND ENVIRONMENT
+
+(none)
 
 =head1 INCOMPATIBILITIES
 
+(none)
+
 =head1 BUGS AND LIMITATIONS
 
+(none known)
+
 =head1 SEE ALSO
+
+L<Sub::Starter>
 
 =head1 ORIGINAL AUTHOR
 
@@ -868,9 +891,13 @@ Shawn H Corey  C<< <SHCOREY at cpan.org> >>
 =head2 Contributing Authors
 
 (Insert your name here if you modified this program or its documentation.
- Do not remove this comment.)
+Do not remove this comment.)
 
 =head1 ACKNOWLEDGEMENTS
+
+Andy Lester for suggesting C<module-starter> aka C<Module::Starter>.
+
+The PerlMonks L<http://perlmonks.org/> for brainstroming the name.
 
 =head1 COPYRIGHT & LICENCES
 

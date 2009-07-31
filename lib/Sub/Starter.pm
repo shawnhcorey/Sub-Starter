@@ -74,7 +74,7 @@ my %Selections = (
 );
 
 my %Default_attributes = (
-  -assignent         => q{''},
+  -assignment        => q{''},
   -max_usage         => 0,
   -max_variable      => 0,
   -name              => '',
@@ -151,13 +151,13 @@ sub configure {
 }
 
 # --------------------------------------
-#       Name: get_options
-#      Usage: %attributes = $starter_sub->get_options( ; @options_names );
+#       Name: get_attributes
+#      Usage: %attributes = $starter_sub->get_attributes( ; @attribute_names );
 #    Purpose: To retrieve the current value(s) of the attributes.
-# Parameters: @options_names -- each must be a key in %Default_attributes
-#    Returns:    %attributes -- current settings
+# Parameters: @attribute_names -- each must be a key in %Default_attributes
+#    Returns:      %attributes -- current settings
 #
-sub get_options {
+sub get_attributes {
   my $self       = shift @_;
   my @attributes = @_;
   my %attributes = ();
@@ -250,7 +250,7 @@ sub _parse_returns {
   return unless length $returns;
 
   if( $returns =~ s{ \+\= \z }{}msx ){
-    $parsed->{-assignent} = 0;
+    $parsed->{-assignment} = 0;
   }else{
     $returns =~ s{ \= \z }{}msx;
   }
@@ -404,8 +404,6 @@ sub parse_usage {
 #
 sub _fill_out_usage {
   my $self   = shift @_;
-  my $part   = shift @_;
-  my $format = shift @_;
   my $text   = '';
 
   # alternative returns
@@ -422,7 +420,7 @@ sub _fill_out_usage {
     }
     $text .= join( ', ', @list ) . ' ';
     $text .= ') ' if @{ $self->{-returns} } > 1;
-    if( $self->{-assignent} eq '0' ){
+    if( $self->{-assignment} eq '0' ){
       $text .= '+= ';
     }else{
       $text .= '= ';
@@ -529,10 +527,14 @@ sub _fill_out_each {
   $format =~ s{ \\ ($String_escapes) }{$String_escapes{$1}||$1}egmsx;
 
   # print 'each: ', Dumper $format, \@list;
-  if( $format =~ m{ \* }msx ){
-    $text = [ map { sprintf( $format, $max_len, $_ ) } @list ];
+  if( $format ){
+    if( $format =~ m{ \* }msx ){
+      $text = [ map { sprintf( $format, $max_len, $_ ) } @list ];
+    }else{
+      $text = [ map { sprintf( $format, $_ ) } @list ];
+    }
   }else{
-    $text = [ map { sprintf( $format, $_ ) } @list ];
+    $text = [ @list ];
   }
 
   return $text;
@@ -695,7 +697,9 @@ sub _fill_out_definitions {
 
   # print 'self: ', Dumper $self;
 
-  $format =~ s{ \\ ($String_escapes) }{$String_escapes{$1}||$1}egmsx;
+  if( $format ){
+    $format =~ s{ \\ ($String_escapes) }{$String_escapes{$1}||$1}egmsx;
+  }
 
   # do parameters
   if( $self->{-object} ){
@@ -712,14 +716,18 @@ sub _fill_out_definitions {
   for my $item ( @list ){
     next if $seen{$item->{-variable}} ++;
     my $value = 'shift @_';
-    $value .= " || $self->{-assignent}" if $item->{optional};
+    $value .= " || $self->{-assignment}" if $item->{optional};
     if( $item->{-type} eq 'array' || $item->{-type} eq 'hash' ){
       $value = '@_';
     }
-    if( $format =~ m{ \* }msx ){
-      push @$text, sprintf( $format, $self->{-max_variable}, $item->{-variable}, $value );
+    if( $format ){
+      if( $format =~ m{ \* }msx ){
+        push @$text, sprintf( $format, $self->{-max_variable}, $item->{-variable}, $value );
+      }else{
+        push @$text, sprintf( $format, $item->{-variable}, $value );
+      }
     }else{
-      push @$text, sprintf( $format, $item->{-variable}, $value );
+      push @$text, "$tiem->{-variable} = $value";
     }
   }
 
@@ -733,7 +741,7 @@ sub _fill_out_definitions {
   # print 'returns @list ', Dumper \@list;
   for my $item ( @list ){
     next if $seen{$item->{-variable}} ++;
-    my $value = $self->{-assignent};
+    my $value = $self->{-assignment};
     if( $item->{-type} eq 'scalar' ){
       # value already set
     }elsif( $item->{-type} eq 'array' || $item->{-type} eq 'hash' ){
@@ -745,10 +753,14 @@ sub _fill_out_definitions {
     }else{
       $value = 'undef';
     }
-    if( $format =~ m{ \* }msx ){
-      push @$text, sprintf( $format, $self->{-max_variable}, $item->{-variable}, $value );
+    if( $format ){
+      if( $format =~ m{ \* }msx ){
+        push @$text, sprintf( $format, $self->{-max_variable}, $item->{-variable}, $value );
+      }else{
+        push @$text, sprintf( $format, $item->{-variable}, $value );
+      }
     }else{
-      push @$text, sprintf( $format, $item->{-variable}, $value );
+      push @$text, "$tiem->{-variable} = $value";
     }
   }
 
@@ -814,11 +826,102 @@ This document refers to Sub::Starter version v1.0.0
 
 =head1 DESCRIPTION
 
+This module is for providing a simple and consist way of
+creating sub's.  It provides methods for loading the
+interface to a sub and, using a template, output its
+skeleton.  This skeleton can then be populate with code.
+
+=head2 Usage Statements
+
+A usage statement shows how a sub will be used.  It is used
+by the C<parse_usage()> method.  It is not valid Perl.  It
+uses the make-a-reference-to notation for references.  This
+is to give a clear indication of what the references is to.
+
+The following variables can be used for the parameters,
+including the opptional ones, and the returns;
+
+=over 4
+
+=item $scalar -- a scalar variable
+
+=item @array -- an array variable or list
+
+=item %hash -- a hash variable or list
+
+=item \$scalar -- a reference to a scalar
+
+=item \@array -- a reference to a array
+
+=item \%hash -- a reference to a hash
+
+=item \&code -- a reference to code
+
+=item \*typeglob -- a reference to a typeglob
+
+=back
+
+Usage statements are:
+
+  [ [ returns_alternate '|' ] returns_list assignment ] [ object '->' ] name [ '(' parameter_list [ ';' optional_parameters ] ')'? ] ';'?
+
+The C<returns_alternate> is a scalar.
+
+The C<assignment> is one of: C<=>, C<.=>, or C<+=>
+
+The C<returns_list> and the C<parameters_list> must be a
+list of scalars and references except for the last element,
+which can be an array or hash.  If the
+C<optional_pararmeters> list is present, the
+C<parameters_list> cannot end with an array or hash.
+Instead, the C<optional_parameters> list can.  These lists
+are variables separated by a comma.
+
+=head2 Templates
+
+Templates are used by the C<fill_out()> method to determine
+how the output will look.  Tehy are array of lines.  Each
+line may contain one, and only one, directive.  Lines
+without directives are copied verbatim to the output.  Some
+directives has arguments.  Directive are distinguished by
+the sequence C<\e[1m(> and ending with C<)\e[0m> where C<\e>
+means the ASCII ESCAPE character.  The directives are:
+
+=over 4
+
+=item The name directive
+
+The C<name> directive is replaced with the name of the sub.
+It has no arguments.
+
+=item The usage directive
+
+The C<usage> directive is replaced with the usage statment.
+It has no arguments.
+
+=item The parameters directive
+
+TBD
+
+=item The returns directive
+
+TBD
+
+=item The definitions directive
+
+TBD
+
+=back
+
 TBD
 
 =head1 METHODS
 
 =head2 new()
+
+Create a new sub starter object.  This object is populated
+with default variables for its attributes.  These should be
+changed before any output is attempted.
 
 =head3 Usage
 
@@ -830,7 +933,71 @@ TBD
 
 =item %attributes
 
-TBD
+All this module's attributes start with a minus sign or a
+space.  Those that start with a minus sign are part of its
+API.  Those that start with a space are for internal storage
+and should not be changed.
+
+If the application needs to store infomation in the object,
+start the key with an alphanumeric character.  If a derived
+class needs an attribute, start it with two minus signs.
+
+=over 4
+
+=item -assignment
+
+This is the value assign to the optional parameters when
+they are not present in the sub's call.
+
+=item -max_usage
+
+This is the maximum length of a variable string used in the
+usage statement.
+
+=item -max_variable
+
+This is the maximum length of a variable string used
+internally within the sub.
+
+=item -name
+
+This is the name of the sub.  It should be a valid Perl
+identifier.
+
+=item -object
+
+This is the name of the object for the sub if it's a method.
+It should be a scalar, as C<$object>, or a module, as
+C<Sub::Scalar>.
+
+=item -parameters
+
+This is a list of hashes decribing the parameters.  Each has
+a:
+
+C<-type>: C<scalar>, C<array>, C<hash>, C<scalar_ref>,
+C<array_ref>, C<hash_ref>, C<code_ref>, or C<typeglob>
+
+C<-usage>: the name of the variable as it appears in the usage statement.
+
+C<-variable>: the name of the variable as it appears inside the sub.
+
+C<-optional>: whether the parameter is optional.
+
+=item -returns_alternate
+
+This is a reference to a hash describing the alternate
+return.  It should be a scalar and is described the same way
+as the parameters except it cannot be optional.  If it is,
+then this attribute is the null string.
+
+=item -returns
+
+This is a list of hashes decribing the returns.  They are
+described the same way as the parameters except they cannot
+be optional.
+
+=back
 
 =back
 
@@ -840,11 +1007,13 @@ TBD
 
 =item $starter_sub
 
-TBD
+This is the new object blessed to the C<Sub::Staarter> class.
 
 =back
 
 =head2 configure()
+
+This method can set one or more of the attributes.
 
 =head3 Usage
 
@@ -856,7 +1025,7 @@ TBD
 
 =item %attributes
 
-TBD
+Same as in the L<new()> method.
 
 =back
 
@@ -864,19 +1033,22 @@ TBD
 
 (none)
 
-=head2 get_options()
+=head2 get_attributes()
+
+Get tone or more attributes.
 
 =head3 Usage
 
-  %attributes = $starter_sub->get_options( ; @options_names );
+  %attributes = $starter_sub->get_attributes( ; @attribute_names );
 
 =head3 Parameters
 
 =over 4
 
-=item @options_names
+=item @attribute_names
 
-TBD
+An optional list of attribute names.  If the list is empty,
+all attributes are returned.
 
 =back
 
@@ -886,11 +1058,14 @@ TBD
 
 =item %attributes
 
-TBD
+A hash of the requested attributes and their values.
 
 =back
 
 =head2 parse_usage()
+
+Parse an usage statement.
+See L<Usage Statements>.
 
 =head3 Usage
 
@@ -902,7 +1077,7 @@ TBD
 
 =item $usage_statement
 
-TBD
+A string showing how the sub is to be used.
 
 =back
 
@@ -911,6 +1086,9 @@ TBD
 (none)
 
 =head2 fill_out()
+
+Fill out a template.
+See L<Templates> for details on creating one.
 
 =head3 Usage
 
@@ -922,7 +1100,7 @@ TBD
 
 =item \@template
 
-TBD
+The template with one line per element of the array.
 
 =back
 
@@ -932,15 +1110,21 @@ TBD
 
 =item $text
 
-TBD
+The text created from the template.
 
 =back
 
 =head1 DIAGNOSTICS
 
+(none)
+
 =head1 CONFIGURATION AND ENVIRONMENT
 
+(none)
+
 =head1 INCOMPATIBILITIES
+
+(none)
 
 =head1 BUGS AND LIMITATIONS
 
@@ -981,6 +1165,8 @@ L<http://search.cpan.org/dist/Sub-Starter>
 
 =head1 SEE ALSO
 
+(none)
+
 =head1 ORIGINAL AUTHOR
 
 Shawn H Corey  C<< <SHCOREY at cpan.org> >>
@@ -991,6 +1177,8 @@ Shawn H Corey  C<< <SHCOREY at cpan.org> >>
  Do not remove this comment.)
 
 =head1 ACKNOWLEDGEMENTS
+
+(none)
 
 =head1 COPYRIGHT & LICENCES
 
