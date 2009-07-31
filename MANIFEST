@@ -3,7 +3,11 @@ Changes
 MANIFEST
 README
 lib/Sub/Starter.pm
-scripts/substarter.pl
+script/substarter
 t/00-load.t
+t/01-parse_usage.t
+t/02-usage.t
+t/03-sub.t
+t/04-pod.t
 t/pod-coverage.t
 t/pod.t
