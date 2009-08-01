@@ -1249,7 +1249,7 @@ Shawn H Corey  C<< <SHCOREY at cpan.org> >>
 
 =head1 ACKNOWLEDGEMENTS
 
-(none)
+jethro at perlmonks.org for brainstroming its name.
 
 =head1 COPYRIGHT & LICENCES
 
