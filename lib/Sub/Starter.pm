@@ -43,7 +43,7 @@ binmode STDERR, ':utf8';
 
 # --------------------------------------
 # Version
-use version; our $VERSION = qv(v1.0.0);
+use version; our $VERSION = qv(v1.0.1);
 
 # --------------------------------------
 # Modules
@@ -804,7 +804,7 @@ Sub::Starter - Creates a skeletal framework for Perl sub's.
 
 =head1 VERSION
 
-This document refers to Sub::Starter version v1.0.0
+This document refers to Sub::Starter version v1.0.1
 
 =head1 SYNOPSIS
 

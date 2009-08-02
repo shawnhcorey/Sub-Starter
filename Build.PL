@@ -4,7 +4,7 @@ use Module::Build;
 
 my $builder = Module::Build->new(
     module_name         => 'Sub::Starter',
-    license             => 'GPL v3',
+    license             => 'gpl',
     dist_author         => 'Shawn H Corey <SHCOREY@cpan.org>',
     dist_version_from   => 'lib/Sub/Starter.pm',
     build_requires => {
