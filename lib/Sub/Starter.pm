@@ -31,7 +31,7 @@ package Sub::Starter;
 # --------------------------------------
 # Pragmatics
 
-require 5.8.0;
+require v5.8.0;
 
 use strict;
 use warnings;
@@ -43,7 +43,7 @@ binmode STDERR, ':utf8';
 
 # --------------------------------------
 # Version
-use version; our $VERSION = qv(v1.0.1);
+use version; our $VERSION = qv(v1.0.2);
 
 # --------------------------------------
 # Modules
@@ -804,7 +804,7 @@ Sub::Starter - Creates a skeletal framework for Perl sub's.
 
 =head1 VERSION
 
-This document refers to Sub::Starter version v1.0.1
+This document refers to Sub::Starter version v1.0.2
 
 =head1 SYNOPSIS
 
