@@ -37,9 +37,6 @@ use strict;
 use warnings;
 
 use utf8;  # Convert all UTF-8 to Perl's internal representation.
-binmode STDIN,  ':utf8';
-binmode STDOUT, ':utf8';
-binmode STDERR, ':utf8';
 
 # --------------------------------------
 # Version
