@@ -34,7 +34,7 @@ use warnings;
 
 # --------------------------------------
 # Version
-use version; our $VERSION = qv(v1.0.1);
+use version; our $VERSION = qv(v1.0.2);
 
 # --------------------------------------
 # Modules
@@ -324,7 +324,7 @@ substarter - Starts a sub from a usage statement formatted from a template.
 
 =head1 VERSION
 
-This document refers to substarter version v1.0.1
+This document refers to substarter version v1.0.2
 
 =head1 USAGE
 
