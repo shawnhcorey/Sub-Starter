@@ -31,7 +31,7 @@ package Sub::Starter;
 # --------------------------------------
 # Pragmatics
 
-require v5.8.0;
+require 5.008;
 
 use strict;
 use warnings;
