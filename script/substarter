@@ -427,9 +427,9 @@ template.
 
 =head1 EXAMPLES
 
-=over 4
-
 =head2 trim()
+
+=over 4
 
 =item usage
 
@@ -484,7 +484,11 @@ template.
 
   =back
 
+=back
+
 =head2 $object->get_options()
+
+=over 4
 
 =item usage
 
@@ -535,7 +539,11 @@ template.
 
   =back
 
+=back
+
 =head2 baselines()
+
+=over 4
 
 =item usage
 
@@ -603,7 +611,11 @@ template.
 
   =back
 
+=back
+
 =head2 column_blocks()
+
+=over 4
 
 =item usage
 
@@ -665,7 +677,11 @@ template.
 
   =back
 
+=back
+
 =head2 format_paragraph()
+
+=over 4
 
 =item usage
 
@@ -727,7 +743,11 @@ template.
 
   =back
 
+=back
+
 =head2 print_lines()
+
+=over 4
 
 =item usage
 
@@ -793,8 +813,11 @@ template.
 
   =back
 
+=back
 
 =head2 print_paragraph()
+
+=over 4
 
 =item usage
 
